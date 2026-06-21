@@ -1,0 +1,26 @@
+Jordan Lee
+jordan.lee@email.com | (555) 123-4567 | linkedin.com/in/jordanlee
+
+Summary
+Backend engineer with 4 years of experience building scalable web services
+and data pipelines. Comfortable owning systems end to end, from design
+through deployment.
+
+Skills
+Python, FastAPI, PostgreSQL, Docker, AWS, Git, REST APIs, Pandas,
+CI/CD, Agile
+
+Experience
+Backend Engineer, Northwind Analytics
+- Built and maintained RESTful services in Python (FastAPI) handling 2M+ requests/day
+- Designed ETL pipelines moving data from PostgreSQL into a Spark-based warehouse
+- Containerized services with Docker and deployed on AWS ECS
+- Collaborated with a cross-functional team in two-week agile sprints
+
+Software Engineer, Bramble Co
+- Developed internal tooling in Python and JavaScript
+- Set up CI/CD pipelines using GitHub Actions, cutting deploy time by 40%
+- Mentored two junior engineers
+
+Education
+B.Tech in Computer Science, State University, 2020

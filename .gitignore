@@ -1,0 +1,76 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Packaging / build
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# =========================
+# Environment / secrets
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# Logs / test / cache
+# =========================
+*.log
+logs/
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# =========================
+# IDE / OS
+# =========================
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# =========================
+# ML / model cache
+# =========================
+.cache/
+huggingface/
+hf_cache/
+sentence_transformers/
+
+# =========================
+# Runtime temp / uploads
+# =========================
+tmp/
+temp/
+uploads/
+gradio_cached_examples/
+
+# =========================
+# Local DB / app runtime
+# =========================
+*.db
+*.sqlite3
+
+# =========================
+# Ignore only generated upload/output data
+# instead of all txt/pdf/docx files
+# =========================
+data/uploads/
+data/outputs/
