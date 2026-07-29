@@ -23,12 +23,11 @@ Weights are configurable in `.env`.
 ## Setup
 
 ```bash
-cd semantic-ats
 python -m venv venv
 source venv/bin/activate          # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 
-cp .env.example .env
+cp .env
 # edit .env and add your GEMINI_API_KEY (only needed for --explain / include_explanation)
 ```
 
@@ -72,30 +71,3 @@ Interactive docs at `http://127.0.0.1:8000/docs`. Two endpoints:
 
 - `POST /api/v1/score/text` — JSON body `{resume_text, jd_text, include_explanation}`
 - `POST /api/v1/score/upload` — multipart upload of `resume_file` + `jd_file` (PDF/DOCX/TXT)
-
-## Project layout
-
-See module docstrings — every file explains its own role and the reasoning
-behind it. Start reading at `app/scoring/weighted_scorer.py`, which is the
-orchestrator that calls everything else.
-
-## The highest-leverage file to edit
-
-`data/skills_taxonomy.json` — skill extraction quality depends entirely on
-this taxonomy's coverage. The sample has ~50 entries; extend it with
-skills relevant to your target domain. This matters more than any
-algorithm tweak.
-
-## Known limitations (worth stating in any writeup)
-
-- Section detection is regex/heuristic-based and will misparse unusual
-  resume formats — see `app/parsing/section_extractor.py` for the header
-  list to extend.
-- No ground truth: weights are heuristic defaults, not learned from
-  labeled data. If you want to validate/tune them, hand-label a small set
-  of resume/JD pairs with a relevance score and grid-search the weights
-  against it.
-- Real ATS systems face documented bias concerns (filtering on proxies
-  for protected characteristics). This project doesn't filter/reject —
-  it only scores — but if you extend it to auto-reject candidates, audit
-  for disparate impact first.
