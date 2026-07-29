@@ -22,9 +22,8 @@ class Config:
     WEIGHT_SEMANTIC: float = float(os.getenv("SCORE_WEIGHT_SEMANTIC", "0.45"))
     WEIGHT_STRUCTURAL: float = float(os.getenv("SCORE_WEIGHT_STRUCTURAL", "0.20"))
 
-    # --- Within keyword score: skill-coverage vs raw BM25 text overlap ---
     KEYWORD_SKILL_COVERAGE_WEIGHT: float = 0.6
-    KEYWORD_BM25_WEIGHT: float = 0.4
+    KEYWORD_TERM_OVERLAP_WEIGHT: float = 0.4
 
     # --- Within semantic score: per-section weights ---
     SEMANTIC_SECTION_WEIGHTS: dict = {

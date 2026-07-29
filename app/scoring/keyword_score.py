@@ -8,37 +8,23 @@ Two components, combined:
    (weighted by how often the JD repeats them) appear anywhere in the
    resume. Catches keyword overlap outside the taxonomy (company-specific
    tools, jargon not yet catalogued).
-
-   Note on BM25: a natural first instinct here is classic BM25 (rank_bm25).
-   Don't — BM25's IDF term is defined relative to a *corpus* of documents,
-   and with a corpus of one (just the resume), the IDF math degenerates
-   (it goes negative for any term that appears in "more than half" of a
-   1-document corpus, which is most terms). BM25 only makes sense once you
-   have many resumes to compare against each other. For single resume-vs-JD
-   comparison, simple log-frequency-weighted term coverage is both more
-   robust and more transparent.
 """
 import math
 import re
 from collections import Counter
+import nltk
+from nltk.corpus import stopwords
 
 from config import Config
 from app.extraction.skill_extractor import extract_skills
 
-STOPWORDS = {
-    "the", "a", "an", "and", "or", "but", "is", "are", "was", "were", "be",
-    "been", "being", "to", "of", "in", "on", "at", "for", "with", "by",
-    "from", "as", "this", "that", "these", "those", "it", "its", "we",
-    "you", "your", "our", "will", "shall", "should", "would", "can",
-    "could", "may", "might", "must", "have", "has", "had", "do", "does",
-    "did", "i", "not", "no",
-}
+nltk.download('stopwords', quiet=True)
 
+STOPWORDS = set(stopwords.words('english'))
 
 def _tokenize(text: str) -> list[str]:
     words = re.findall(r"[a-zA-Z][a-zA-Z0-9+#./-]*", text.lower())
     return [w for w in words if w not in STOPWORDS and len(w) > 1]
-
 
 def skill_coverage_score(resume_text: str, jd_text: str) -> float:
     """Fraction of JD's required skills present in the resume. Range 0-1."""
@@ -47,7 +33,6 @@ def skill_coverage_score(resume_text: str, jd_text: str) -> float:
         return 1.0  # JD names no extractable skills -> don't penalize on this axis
     present = extract_skills(resume_text)
     return len(required & present) / len(required)
-
 
 def weighted_term_overlap_score(resume_text: str, jd_text: str) -> float:
     """
@@ -72,7 +57,6 @@ def weighted_term_overlap_score(resume_text: str, jd_text: str) -> float:
     matched_weight = sum(w for term, w in weights.items() if term in resume_tokens)
     return matched_weight / total_weight
 
-
 def keyword_score(resume_text: str, jd_text: str) -> dict:
     """Combined keyword score with breakdown for explainability."""
     coverage = skill_coverage_score(resume_text, jd_text)
@@ -80,7 +64,7 @@ def keyword_score(resume_text: str, jd_text: str) -> dict:
 
     combined = (
         Config.KEYWORD_SKILL_COVERAGE_WEIGHT * coverage
-        + Config.KEYWORD_BM25_WEIGHT * term_overlap
+        + Config.KEYWORD_TERM_OVERLAP_WEIGHT * term_overlap
     )
 
     return {

@@ -43,9 +43,13 @@ class Explanation(BaseModel):
     gaps: list[str]
     suggestions: list[str]
 
+class ScoreBreakdown(BaseModel):
+    keyword: KeywordBreakdown
+    semantic: SemanticBreakdown
+    structural: StructuralBreakdown
 
 class ScoreResponse(BaseModel):
     final_score: float
-    breakdown: dict
+    breakdown: ScoreBreakdown
     gap_analysis: GapAnalysis
     explanation: Explanation | None = None

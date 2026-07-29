@@ -12,7 +12,7 @@ from app.explainability.gemini_explainer import generate_explanation
 router = APIRouter()
 
 
-def _run_pipeline(resume_text: str, jd_text: str, include_explanation: bool) -> dict:
+def run_pipeline(resume_text: str, jd_text: str, include_explanation: bool) -> dict:
     result = compute_ats_score(resume_text, jd_text)
 
     if include_explanation:
@@ -26,7 +26,7 @@ def _run_pipeline(resume_text: str, jd_text: str, include_explanation: bool) -> 
 @router.post("/score/text", response_model=ScoreResponse)
 def score_text(payload: ScoreTextRequest):
     """Score a resume against a JD given as raw text (no file upload)."""
-    return _run_pipeline(payload.resume_text, payload.jd_text, payload.include_explanation)
+    return run_pipeline(payload.resume_text, payload.jd_text, payload.include_explanation)
 
 
 @router.post("/score/upload", response_model=ScoreResponse)
@@ -37,15 +37,15 @@ async def score_upload(
 ):
     """Score a resume against a JD, both uploaded as PDF/DOCX/TXT files."""
     try:
-        resume_text = await _extract_uploaded_text(resume_file)
-        jd_text = await _extract_uploaded_text(jd_file)
+        resume_text = await extract_uploaded_text(resume_file)
+        jd_text = await extract_uploaded_text(jd_file)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-    return _run_pipeline(resume_text, jd_text, include_explanation)
+    return run_pipeline(resume_text, jd_text, include_explanation)
 
 
-async def _extract_uploaded_text(upload: UploadFile) -> str:
+async def extract_uploaded_text(upload: UploadFile) -> str:
     suffix = os.path.splitext(upload.filename or "")[1].lower()
     content = await upload.read()
 

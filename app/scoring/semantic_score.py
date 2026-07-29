@@ -3,11 +3,6 @@ Semantic scoring: embeds resume and JD sections separately and compares
 them section-to-section (skills-to-skills, experience-to-responsibilities,
 etc) rather than embedding whole documents.
 
-Whole-document embedding similarity is the most common mistake in "AI ATS"
-projects — it scores resumes high just for being topically adjacent
-(e.g. a Data Analyst resume against a Data Scientist JD). Section-wise
-comparison is more precise because it forces like-for-like comparison.
-
 The model loads once per process (module-level singleton) since loading
 a sentence-transformer is expensive — don't reload it per request.
 """

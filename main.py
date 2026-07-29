@@ -20,3 +20,11 @@ app.include_router(router, prefix="/api/v1", tags=["scoring"])
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+@app.get("/")
+def root():
+    return {
+        "message": "Semantic ATS API is running",
+        "docs": "/docs",
+        "health": "/health"
+    }

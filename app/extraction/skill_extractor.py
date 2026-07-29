@@ -38,7 +38,7 @@ def _build_alias_index() -> dict[str, str]:
 
 def _candidate_phrases(text: str) -> set[str]:
     """
-    Generate candidate 1-3 word phrases from text to test against the taxonomy.
+    Generate candidate 1-4 word phrases from text to test against the taxonomy.
     Cheap substitute for full noun-phrase chunking.
     """
     # Strip punctuation except +, #, ., / which appear inside real skill names
@@ -47,7 +47,7 @@ def _candidate_phrases(text: str) -> set[str]:
     tokens = cleaned.split()
 
     phrases = set()
-    for n in (1, 2, 3):
+    for n in range(1, 5):
         for i in range(len(tokens) - n + 1):
             phrases.add(" ".join(tokens[i:i + n]))
     return phrases

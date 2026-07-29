@@ -8,9 +8,6 @@ This is heuristic by nature — resume formats vary enormously. The approach:
 2. Everything between two headers belongs to the section started by the
    first header.
 3. Anything before the first detected header goes into "summary".
-
-If you find this misclassifying real resumes, the fix is almost always to
-extend SECTION_HEADERS with more synonyms — don't rewrite the algorithm.
 """
 import re
 
