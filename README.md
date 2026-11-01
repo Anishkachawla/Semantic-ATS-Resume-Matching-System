@@ -50,13 +50,14 @@ python scripts/run_demo.py --resume path/to/resume.pdf --jd path/to/jd.txt --exp
 `--explain` calls Gemini for a written explanation + suggestions (requires
 `GEMINI_API_KEY`); omit it to get the numeric score only, with no API calls.
 
-## Run the Gradio UI
+## Run the React UI
 
 ```bash
-python gradio_app.py
+cd frontend
+npm run dev
 ```
 
-Opens at `http://127.0.0.1:7860`. Upload or paste a resume and JD (there's a
+Upload or paste a resume and JD (there's a
 "Load sample data" button to try it instantly), optionally tick "Generate
 written explanation" to call Gemini, and hit "Score resume." Shows the
 final score, a per-signal breakdown, and matched/missing skill chips.
