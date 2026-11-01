@@ -43,10 +43,17 @@ class Explanation(BaseModel):
     gaps: list[str]
     suggestions: list[str]
 
+class WeightsUsed(BaseModel):
+    keyword: float
+    semantic: float
+    structural: float
+
+
 class ScoreBreakdown(BaseModel):
     keyword: KeywordBreakdown
     semantic: SemanticBreakdown
     structural: StructuralBreakdown
+    weights_used: WeightsUsed
 
 class ScoreResponse(BaseModel):
     final_score: float

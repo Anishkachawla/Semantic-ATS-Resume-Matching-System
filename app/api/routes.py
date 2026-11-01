@@ -23,6 +23,46 @@ def run_pipeline(resume_text: str, jd_text: str, include_explanation: bool) -> d
     return result
 
 
+SAMPLE_DIR = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+    "tests", "sample_data",
+)
+
+
+@router.get("/sample")
+def get_sample():
+    """Bundled sample resume + JD (powers the 'Load sample' button in the UI)."""
+    return {
+        "resume_text": extract_text(os.path.join(SAMPLE_DIR, "sample_resume.txt")),
+        "jd_text": extract_text(os.path.join(SAMPLE_DIR, "sample_jd.txt")),
+    }
+
+
+@router.post("/score", response_model=ScoreResponse)
+async def score_combined(
+    resume_file: UploadFile | None = File(default=None),
+    resume_text: str = Form(default=""),
+    jd_file: UploadFile | None = File(default=None),
+    jd_text: str = Form(default=""),
+    include_explanation: bool = Form(default=False),
+):
+    """Used by the React UI: each side can be an uploaded file OR pasted text."""
+    try:
+        resume = await _resolve(resume_file, resume_text, "resume")
+        jd = await _resolve(jd_file, jd_text, "job description")
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    return run_pipeline(resume, jd, include_explanation)
+
+
+async def _resolve(upload: UploadFile | None, pasted: str, label: str) -> str:
+    if upload is not None and upload.filename:
+        return await extract_uploaded_text(upload)
+    if pasted and pasted.strip():
+        return pasted
+    raise ValueError(f"Add a {label}: upload a file or paste the text in.")
+
+
 @router.post("/score/text", response_model=ScoreResponse)
 def score_text(payload: ScoreTextRequest):
     """Score a resume against a JD given as raw text (no file upload)."""
